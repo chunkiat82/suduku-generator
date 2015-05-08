@@ -1,0 +1,15 @@
+{
+  "name": "raymondho",
+  "version": "1.0.0",
+  "description": "suduku solver",
+  "main": ".mongorc.js",
+  "scripts": {
+    "start": "node ./suduku.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chance": "^0.7.4"
+  }
+}
