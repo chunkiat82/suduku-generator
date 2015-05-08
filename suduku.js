@@ -41,19 +41,24 @@ function randomDataGenerator(board){
 			console.log("columnBefore="+column);
 			console.log("squareBefore="+square);
 
+			var selectedSet = row;
+			if (row.length > column.length){
+				selectedSet = column;
+				if (column.length > square.length){
+					selectedSet = square;
+				}
+			}
+			if (row.length > square.length){
+				selectedSet = square;
+				if (square.length > column.length){
+					selectedSet = column;
+				}
+			}
 			
 			var found = false;
-			while (!found || column.length>1 || row.length>1 || square.length>1){
-				var outputChance = chance.pick(row);
-				found =  column.indexOf(outputChance) != -1 && square.indexOf(outputChance) != -1;
-				if (!found){
-					outputChance = chance.pick(column);
-					found =  row.indexOf(outputChance) != -1 && square.indexOf(outputChance) != -1;
-					if (!found){
-						outputChance = chance.pick(square);
-						found =  row.indexOf(outputChance) != -1 && column.indexOf(outputChance) != -1;
-					}
-				}					
+			while (!found){
+				var outputChance = chance.pick(selectedSet);
+				found = column.indexOf(outputChance) != -1 && square.indexOf(outputChance) != -1 && row.indexOf(outputChance) != -1;				
 			}
 		
 			
@@ -67,13 +72,17 @@ function randomDataGenerator(board){
 			console.log("column="+column);
 			console.log("square="+square);
 			
-			board[i][j]= outputChance<1 ? " " : outp`utChance
+			board[i][j]= outputChance<1 ? " " : outputChance
 			printBoard(board);
 			console.log("");
 			console.log("--------------------------------");
 			console.log("");
 		}		
 	}
+}
+
+function pickLogic(){
+
 }
 
 function printBoard(board){
