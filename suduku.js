@@ -23,61 +23,64 @@ for (var i = 0; i < 9; i++) {
 	squares[i] = ['1','2','3','4','5','6','7','8','9'];
 }
 
-function randomDataGenerator(board){
+function randomDataGenerator(board,i,j){
 
-	//generator centers
+	if (j>9){
+		++i;
+		j=1;
+	}
 
-	for (var i = 0; i<9 ; i++){		
-		var row = rows[i];
-		for (var j = 0; j<9 ; j++){
-			var column = columns[j];
-			var squareIndex = parseInt(i / 3) + parseInt(i / 3) * 2 + parseInt(j / 3);
-			console.log("squareIndex="+parseInt(i / 3)+"-"+parseInt(j / 3));
-			var square = squares[squareIndex];
+	if (i<=9){
+		console.log("i="+i+", j="+j);
 
-			console.log("i,j,k="+i+","+j+","+squareIndex);
+		//should pass in rows, columns and squares too
+		var selectedValue = selectValue(i-1,j-1);
+		if (selectedValue == 0 ){
+			return;
+		}else{
+			board[i-1][j-1]= selectedValue;
+		}
 
-			console.log("rowBefore="+row);
-			console.log("columnBefore="+column);
-			console.log("squareBefore="+square);
+		randomDataGenerator(board,i,++j);
+	}
+	
+}
 
-			var selectedSet = row;
-			if (row.length > column.length){
-				selectedSet = column;
-				if (column.length > square.length){
-					selectedSet = square;
-				}
-			}
-			if (row.length > square.length){
-				selectedSet = square;
-				if (square.length > column.length){
-					selectedSet = column;
-				}
-			}
-			
-			var found = false;
-			while (!found){
-				var outputChance = chance.pick(selectedSet);
-				found = column.indexOf(outputChance) != -1 && square.indexOf(outputChance) != -1 && row.indexOf(outputChance) != -1;				
-			}
-		
-			
+function selectValue(i,j){
+	var row = rows[i];
+	var column = columns[j];
+	var squareIndex = parseInt(i / 3) + parseInt(i / 3) * 2 + parseInt(j / 3);
+	var square = squares[squareIndex];
+	//console.log("squareIndex="+parseInt(i / 3)+"-"+parseInt(j / 3));
+	
+	var selectedSet = row;
+	if (row.length > column.length){
+		selectedSet = column;
+		if (column.length > square.length){
+			selectedSet = square;
+		}
+	}
+	if (row.length > square.length){
+		selectedSet = square;
+		if (square.length > column.length){
+			selectedSet = column;
+		}
+	}
+	
+	var outputChance = chance.pick(selectedSet);
+	var found = column.indexOf(outputChance) != -1 && square.indexOf(outputChance) != -1 && row.indexOf(outputChance) != -1;
 
-			row.splice(row.indexOf(outputChance),1);
-			column.splice(column.indexOf(outputChance),1);
-			square.splice(square.indexOf(outputChance),1);
-
-			console.log("outputChance="+outputChance);
-			console.log("row="+row);
-			console.log("column="+column);
-			console.log("square="+square);
-			
-			board[i][j]= outputChance<1 ? " " : outputChance
-			printBoard(board);
-			console.log("");
-			console.log("--------------------------------");
-			console.log("");
-		}		
+	if (found){		
+		row.splice(row.indexOf(outputChance),1);
+		column.splice(column.indexOf(outputChance),1);
+		square.splice(square.indexOf(outputChance),1);
+		return outputChance;
+	}else{
+		console.log("outputChance="+outputChance);
+		console.log("row="+row);
+		console.log("column="+column);
+		console.log("square="+square);
+		return 0;
 	}
 }
 
@@ -95,5 +98,5 @@ function printBoard(board){
 	}
 }
 
-randomDataGenerator(board);
+randomDataGenerator(board,1,1);
 printBoard(board);
